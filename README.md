@@ -1,5 +1,9 @@
 # Smart Staircase Lighting
 
+# LED Staircase Automation
+
+![AI Staircase](images/ai_stairs.png)
+
 Illuminate your staircase intelligently with this project, which uses an ESP32, two PIR sensors, and a WS2812B LED strip to create an animation. Lights turn on automatically as you ascend or descend the stairs, providing safety and a modern aesthetic.
 
 ## Features
