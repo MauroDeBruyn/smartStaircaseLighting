@@ -1,97 +1,74 @@
-#include <Adafruit_NeoPixel.h>
+#include <FastLED.h>
 
 // Define pins and LED count
 #define LED_PIN     14   // Pin connected to the LED strip
 #define BUTTON1_PIN 33   // Pin connected to Button 1
 #define BUTTON2_PIN 25   // Pin connected to Button 2
 #define NUM_LEDS    300  // Number of LEDs in the strip
-#define MAX_CURRENT 3500 // Maximum current in mA
-#define LED_CURRENT 60   // Approx. current per LED in mA at full brightness
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
+CRGB leds[NUM_LEDS]; // Create an array to hold the LED colors
 
 void setup() {
-  Serial.begin(9600);
   pinMode(BUTTON1_PIN, INPUT_PULLUP);
   pinMode(BUTTON2_PIN, INPUT_PULLUP);
-  strip.begin();
   
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS); // Initialize the LED strip
+  FastLED.setBrightness(7); // Set the brightness level (0-255)
 
-    // Set brightness to limit current
-  int maxBrightness = calculateBrightnessLimit();
-  strip.setBrightness(maxBrightness);
-
-  strip.show(); // Initialize all LEDs to off
+  FastLED.show(); // Initialize all LEDs to off
 }
 
 void loop() {
   // Check if Button 1 is pressed
   if (digitalRead(BUTTON1_PIN) == HIGH) {
-    Serial.print("Strip test 1");
-    Serial.println();
     lightUpStairsForward();
-    delay(15000);
-    fadeDownStrip(20);
+    delay(20000);
+    fadeDownStrip(5);
   }
 
   // Check if Button 2 is pressed
   if (digitalRead(BUTTON2_PIN) == HIGH) {
-    Serial.print("Strip test 2");
-    Serial.println();
     lightUpStairsReverse();
-    delay(15000);
-    fadeDownStrip(20);
+    delay(20000);
+    fadeDownStrip(5);
   }
-
 }
 
+// Function to light up LEDs in a "staircase" fashion forward
 void lightUpStairsForward() {
   for (int i = 0; i < NUM_LEDS; i++) {
-    strip.setPixelColor(i, strip.Color(255, 100, 100)); // Red color for animation
-    strip.show();
+    leds[i] = CRGB(255, 100, 100); // Red color for animation
+    FastLED.show();
     delay(5); // Delay for animation speed
   }
 }
 
+// Function to light up LEDs in a "staircase" fashion reverse
 void lightUpStairsReverse() {
   for (int i = NUM_LEDS - 1; i >= 0; i--) {
-    strip.setPixelColor(i, strip.Color(255, 100, 100)); // Red color for reverse animation
-    strip.show();
+    leds[i] = CRGB(255, 100, 100); // Red color for reverse animation
+    FastLED.show();
     delay(5); // Delay for animation speed
   }
 }
 
+// Function to fade down the LED strip
 void fadeDownStrip(int fadeDelay) {
   for (int brightness = 255; brightness >= 0; brightness--) {
     for (int i = 0; i < NUM_LEDS; i++) {
-      // Get the current color of each pixel
-      uint32_t color = strip.getPixelColor(i);
-
-      // Extract RGB components from the current color
-      uint8_t r = (color >> 16) & 0xFF;
-      uint8_t g = (color >> 8) & 0xFF;
-      uint8_t b = color & 0xFF;
+      // Get the current color of each LED
+      CRGB currentColor = leds[i];
 
       // Scale RGB components with a bias to reduce red prominence
-      float redBias = 0.8; // Adjust bias for red (lower value reduces red intensity)
-      //float blueBias = 0.6;
-      uint8_t newR = r * brightness / 255 * redBias;
-      uint8_t newG = g * brightness / 255;
-      uint8_t newB = b * brightness / 255;
+      float redBias = 0.95; // Adjust bias for red (lower value reduces red intensity)
+      uint8_t newR = currentColor.r * brightness / 255 * redBias;
+      uint8_t newG = currentColor.g * brightness / 255;
+      uint8_t newB = currentColor.b * brightness / 255;
 
       // Set the new scaled color
-      strip.setPixelColor(i, strip.Color(newR, newG, newB));
+      leds[i] = CRGB(newR, newG, newB);
     }
-    strip.show();
+    FastLED.show();
     delay(fadeDelay); // Adjust fade speed
   }
-}
-
-
-int calculateBrightnessLimit() {
-  // Calculate maximum brightness to limit current to 1A
-  int maxLEDsAtFullBrightness = MAX_CURRENT / LED_CURRENT; // LEDs that can be fully lit
-  float brightnessFactor = (float)maxLEDsAtFullBrightness / NUM_LEDS;
-  int maxBrightness = brightnessFactor * 255; // Scale brightness (0-255)
-  return constrain(maxBrightness, 1, 255); // Ensure brightness is in valid range
 }
