@@ -22,7 +22,7 @@ Illuminate your staircase intelligently with this project, which uses an ESP32, 
 
 ## Software Requirements
 - Arduino IDE
-- Adafruit NeoPixel library (for WS2812B control)
+- FastLED library (for WS2812B control)
 - ESPAsyncWebServer library (optional, for Wi-Fi controls)
 
 ## Wiring Diagram
