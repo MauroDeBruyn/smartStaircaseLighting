@@ -23,10 +23,13 @@ Illuminate your staircase intelligently with this project, which uses an ESP32, 
 ## Software Requirements
 - Arduino IDE
 - FastLED library (for WS2812B control)
-- ESPAsyncWebServer library (optional, for Wi-Fi controls)
+- ESPAsyncWebServer library (optional, for Wi-Fi controls) (not integrated yet)
 
 ## Wiring Diagram
-*Not completed yet*
+You can find the wiring diagram [here](./diagram/), this folder includes a pdf and schematic file for Altium designer. 
+
+## 3D Files
+The project's control system is mounted beneath the staircase. To accommodate this setup, I designed a wall-mounted enclosure with openings for sensor and power supply cables, along with slotted mounting holes for precise alignment. You can find the 3D files [here](./fusionFiles/).
 
 ## Code
-This code is made for a LED strip containing 300 LED's, modify the code to your needs.
+This code is made for a LED strip containing 300 LED's, modify the code to your needs. The code can be found [here](./code/)
