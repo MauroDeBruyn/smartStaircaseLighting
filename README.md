@@ -33,3 +33,12 @@ The project's control system is mounted beneath the staircase. To accommodate th
 
 ## Code
 This code is made for a LED strip containing 300 LED's, modify the code to your needs. The code can be found [here](./code/)
+
+## Prototype
+
+![prototype](images/prototypeWide.jpg)
+
+The images show the final installment of the project. It was made using a prototyping board. The sensors are wired using ethernet cables. More images can be found [here](./images/)
+
+
+[These](./video/) videos show the concept op this project.
